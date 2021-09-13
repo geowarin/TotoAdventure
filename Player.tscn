@@ -1,0 +1,72 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Player.cs" type="Script" id=1]
+[ext_resource path="res://props/sword_commongltf.tscn" type="PackedScene" id=2]
+
+[sub_resource type="CapsuleMesh" id=1]
+radius = 0.5
+
+[sub_resource type="Animation" id=2]
+resource_name = "Attack"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.35, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0.660491, -0.933304 ), Vector3( 0, 0.962652, -0.933304 ), Vector3( 0, 0.853983, -0.933304 ), Vector3( -0.818734, 0.412437, -0.933304 ), Vector3( 0, 0.660491, -0.933304 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15, 0.35, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( -2.46928, -22.9006, -8.30933 ), Vector3( -32.7377, -22.0538, 13.7803 ), Vector3( -52.6424, -40.3982, 39.2276 ), Vector3( -55.163, -59.7583, 65.4419 ), Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="CapsuleShape" id=3]
+
+[node name="Player" type="KinematicBody"]
+script = ExtResource( 1 )
+
+[node name="RotationHelper" type="Spatial" parent="."]
+
+[node name="PlayerModel" type="MeshInstance" parent="RotationHelper"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="Camera" type="Camera" parent="RotationHelper"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0 )
+far = 200.0
+
+[node name="Weapon" type="Spatial" parent="RotationHelper"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.321476, 0.395617, 0 )
+
+[node name="Sword" parent="RotationHelper/Weapon" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660491, -0.933304 )
+collision_mask = 4
+contacts_reported = 1
+contact_monitor = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RotationHelper/Weapon/Sword"]
+anims/Attack = SubResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 0.5, 0, 0, 0, -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, 0, 1, 0 )
+shape = SubResource( 3 )
+
+[connection signal="body_entered" from="RotationHelper/Weapon/Sword" to="." method="_on_Sword_body_entered"]
+
+[editable path="RotationHelper/Weapon/Sword"]

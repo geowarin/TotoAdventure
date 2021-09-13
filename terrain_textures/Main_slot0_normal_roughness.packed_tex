@@ -1,0 +1,8 @@
+{
+	"contains_albedo": false,
+	"resolution": 1024,
+	"src": {
+		"a": "res://assets/textures/Ground037_2K-JPG/Ground037_2K_Roughness.jpg",
+		"rgb": "res://assets/textures/Ground037_2K-JPG/Ground037_2K_NormalGL.jpg"
+	}
+}
